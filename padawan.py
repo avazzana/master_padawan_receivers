@@ -5,7 +5,7 @@ import time
 import datetime
 from LogFile import Log
 
-MAX_WAIT_TIME = 1 * 60 # 5 minutes timeout
+MAX_WAIT_TIME = 5 * 60 # 5 minutes timeout
 
 class Client:
 
@@ -20,7 +20,7 @@ class Client:
 
     def connect(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client.connect(self.host, self.port)
+        self.client.connect((self.host, self.port))
          # Wait for a message from the server
         message = self.receive_message() # Receive the message (up to 1024 bytes)
 
@@ -64,8 +64,8 @@ class Client:
              
 
 if __name__ == "__main__":
-    host = '0.0.0.0'
-    port = 12345
+    host = '10.69.108.4'  # Use your Wi-Fi IPv4 address
+    port = 5000
     client = Client(host, port)
     client.connect()
 
