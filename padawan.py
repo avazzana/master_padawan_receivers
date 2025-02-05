@@ -1,27 +1,71 @@
 import socket
 import json
+import sys
+import time
+import datetime
+from LogFile import Log
 
-def client_program():
-    host = '127.0.0.1'  # Change this to the server's IP if needed
-    port = 5000
+MAX_WAIT_TIME = 1 * 60 # 5 minutes timeout
 
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((host, port))
+class Client:
 
-    # Handshake using JSON
-    print("Sending SYN")
-    client_socket.send(json.dumps({"type": "SYN"}).encode())
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        self.filename = f"server_{timestamp}.txt"
+        self.log = Log(self.filename)
+        sys.stdout = self.log
+        self.client = None
 
-    data = json.loads(client_socket.recv(1024).decode())
-    if data.get("type") == "SYN-ACK":
-        print("Received SYN-ACK, sending ACK")
-        client_socket.send(json.dumps({"type": "ACK"}).encode())
+    def connect(self):
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect(self.host, self.port)
+         # Wait for a message from the server
+        message = self.receive_message() # Receive the message (up to 1024 bytes)
 
-    # Receive a JSON message from the server
-    message = json.loads(client_socket.recv(1024).decode())
-    print(f"Server says: {message}")
+        # Print the received message
+        print(f"Anakin: received message from server: {message}")
 
-    client_socket.close()
+
+
+    def close(self):
+        self.server.close()
+        print("Obi-Wan: Server closed!")
+        self.log.close()
+
+
+
+
+    def send_message(self, message_type, step_id, body=None):
+        print(f"Sending {message_type} command to client {self.client_id}")
+        message = json.dumps({'type': message_type, 'step_id' : step_id, "body": body}).encode()
+        self.clientSocket.sendall(message)
+    
+
+    def receive_message(self):
+        data = self.client.recv(1024)
+        if not data:
+            print("Anakin: no data received")
+        message = json.loads(data.decode())
+        print(f"Message from {self.host}: {message}")
+
+        if 'step_id' not in message:
+            print("Invalid message:", message)
+
+        if message['step_id'] == 1:
+            print(message)
+                
+        elif message['step_id'] == 2:
+            print(message)
+
+        elif message['step_id'] == 4:
+            print(message) 
+             
 
 if __name__ == "__main__":
-    client_program()
+    host = '0.0.0.0'
+    port = 12345
+    client = Client(host, port)
+    client.connect()
+
