@@ -5,8 +5,6 @@ import time
 import datetime
 from LogFile import Log
 
-MAX_WAIT_TIME = 5 * 60 # 5 minutes timeout
-
 class Client:
 
     def __init__(self, host, port):
@@ -64,7 +62,7 @@ class Client:
              
 
 if __name__ == "__main__":
-    host = '10.69.108.4'  # Use your Wi-Fi IPv4 address
+    host = '192.168.0.153'  # Use your Wi-Fi IPv4 address
     port = 5000
     client = Client(host, port)
     client.connect()
