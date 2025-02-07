@@ -28,11 +28,24 @@ class Server:
         self.server.bind((self.host, self.port))
         self.server.listen(1)
         print(f"Obi-Wan: Server started on {self.host}:{self.port}")
-        self.send_connection_confirmation()
+        self.wait_for_client_connection()
+
+    def wait_for_client_connection(self):
+        while self.clientAddress is None:
+                try:
+                    self.clientSocket, self.clientAddress = self.server.accept()
+                    self.send_connection_confirmation()
+                except socket.timeout:
+                    print("Obi-Wan: Timeout waiting for Padawan Client")
+                    return
     
     def send_connection_confirmation(self):
-        self.send_message("connection_confirmation", 1, "Hi Anakin, it's Obi Wan. \nYou're connected but you're still not part of the jedi council")
-    
+        message = "Obi-Wan here. Congratulations Anakin, you are connected. But this doesn't mean you're on the jedi council"
+        step_id = 1
+        type = "connection_confirmation"
+        self.send_message(type, step_id, message)
+        self.wait_for_client_ack()
+
     def wait_for_client_ack(self):
         self.receive_message()
 
@@ -61,9 +74,9 @@ class Server:
     
     
     def send_message(self, message_type, step_id, body):
-        print(f"Sending {message_type} command to client {self.client_id}")
+        print(f"Sending {message_type} command to client {self.clientAddress}")
         message = json.dumps({'type': message_type, 'sender_id' : self.id, 'step_id' : step_id, "body": body}).encode()
-        self.server.sendall(message)
+        self.clientSocket.sendall(message)
 
     def receive_message(self):
         data = self.server.recv(1024)
