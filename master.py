@@ -58,7 +58,7 @@ class Server:
     def listen_for_stop_rx_confirmation(self):
         print("not yet implemented")
 
-    def close(self, exc_type, exc_value, traceback):
+    def close(self):
         self.server.close()
         print("Obi-Wan: Server closed!")
         self.log.close()
@@ -66,7 +66,7 @@ class Server:
 
     
     
-    def send_message(self, message_type, step_id, body=None):
+    def send_message(self, message_type, step_id, body):
         print(f"Sending {message_type} command to client {self.client_id}")
         message = json.dumps({'type': message_type, 'step_id' : step_id, "body": body}).encode()
         self.clientSocket.sendall(message)

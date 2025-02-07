@@ -29,13 +29,13 @@ class Client:
 
     def close(self):
         self.server.close()
-        print("Obi-Wan: Server closed!")
+        print("Anakin: Server closed!")
         self.log.close()
 
 
 
 
-    def send_message(self, message_type, step_id, body=None):
+    def send_message(self, message_type, step_id):
         print(f"Sending {message_type} command to client {self.client_id}")
         message = json.dumps({'type': message_type, 'step_id' : step_id, "body": body}).encode()
         self.clientSocket.sendall(message)
