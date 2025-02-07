@@ -36,9 +36,9 @@ class Client:
 
 
     def send_message(self, message_type, step_id, body):
-        print(f"Anakin: Sending {message_type} command to client {self.client_id}")
+        print(f"Anakin: Sending {message_type} message to client {self.id}")
         message = json.dumps({'type': message_type, 'sender_id' : self.id, 'step_id' : step_id, "body": body}).encode()
-        self.clientSocket.sendall(message)
+        self.client.sendall(message)
     
 
     def receive_message(self):
