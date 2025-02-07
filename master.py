@@ -28,7 +28,7 @@ class Server:
         self.server.bind((self.host, self.port))
         self.server.listen(1)
         print(f"Obi-Wan: Server started on {self.host}:{self.port}")
-        self.wait_for_client_connection()
+        self.receive_message()
 
     def wait_for_client_connection(self):
         while self.clientAddress is None:
@@ -38,11 +38,14 @@ class Server:
                     step_id = 1
                     type = "start_rx_command"
                     self.send_message(type, step_id, message)
-                    self.close()
+                    self.wait_for_client_ack()
                 except socket.timeout:
                     print("Obi-Wan: Timeout waiting for Padawan Client")
                     return
     
+    def wait_for_client_ack(self):
+        self.receive_message()
+
     def send_start_rx_command(self):
         message = "Obi-Wan here. Anakin, stop being salty and start receiving signals"
         step_id = 2
@@ -57,7 +60,7 @@ class Server:
         print("not yet implemented")
 
     def listen_for_stop_rx_confirmation(self):
-        print("not yet implemented")
+        self.receive_message()
 
     def close(self):
         self.server.close()
@@ -81,12 +84,12 @@ class Server:
 
         if 'step_id' not in message:
             print("Invalid message:", message)
-
-        if message['step_id'] == 3:
-            print(message)
-            
+        elif message['step_id'] == 1:
+            self.send_start_rx_command()
+        elif message['step_id'] == 3:
+            self.send_stop_rx_command()
         elif message['step_id'] == 5:
-            print(message)
+            self.close()
                 
 
 

@@ -21,7 +21,8 @@ class Client:
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((self.host, self.port))
         self.receive_message() 
-        self.close()
+ 
+
 
 
 
@@ -53,10 +54,10 @@ class Client:
         if message['step_id'] == 1:
             print(f"Anakin: received message from {self.host}: {message}")
                 
-        elif message['step_id'] == 2:
+        elif message['step_id'] == 3:
             print(f"Anakin: received message from {self.host}: {message}")
 
-        elif message['step_id'] == 4:
+        elif message['step_id'] == 5:
             print(f"Anakin: received message from {self.host}: {message}")
              
 
