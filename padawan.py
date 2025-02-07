@@ -10,8 +10,9 @@ class Client:
     def __init__(self, host, port):
         self.host = host
         self.port = port
+        self.id = "Anakin"
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        self.filename = f"server_{timestamp}.txt"
+        self.filename = f"padawan_{timestamp}.txt"
         self.log = Log(self.filename)
         sys.stdout = self.log
         self.client = None
@@ -19,11 +20,9 @@ class Client:
     def connect(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((self.host, self.port))
-         # Wait for a message from the server
-        message = self.receive_message() # Receive the message (up to 1024 bytes)
+        self.receive_message() 
+        self.close()
 
-        # Print the received message
-        print(f"Anakin: received message from server: {message}")
 
 
 
@@ -35,9 +34,9 @@ class Client:
 
 
 
-    def send_message(self, message_type, step_id):
-        print(f"Sending {message_type} command to client {self.client_id}")
-        message = json.dumps({'type': message_type, 'step_id' : step_id, "body": body}).encode()
+    def send_message(self, message_type, step_id, body):
+        print(f"Anakin: Sending {message_type} command to client {self.client_id}")
+        message = json.dumps({'type': message_type, 'sender_id' : self.id, 'step_id' : step_id, "body": body}).encode()
         self.clientSocket.sendall(message)
     
 
@@ -46,7 +45,8 @@ class Client:
         if not data:
             print("Anakin: no data received")
         message = json.loads(data.decode())
-        print(f"Message from {self.host}: {message}")
+        print(f"Anakin: received message from {self.host}: {message}")
+        
 
         if 'step_id' not in message:
             print("Invalid message:", message)

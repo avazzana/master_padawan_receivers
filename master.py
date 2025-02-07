@@ -19,6 +19,7 @@ class Server:
         self.clientAddress = None
         self.clientSocket = None
         self.client_id = None
+        self.id = 'Obi Wan'
 
     def start_server(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -68,7 +69,7 @@ class Server:
     
     def send_message(self, message_type, step_id, body):
         print(f"Sending {message_type} command to client {self.client_id}")
-        message = json.dumps({'type': message_type, 'step_id' : step_id, "body": body}).encode()
+        message = json.dumps({'type': message_type, 'sender_id' : self.id, 'step_id' : step_id, "body": body}).encode()
         self.clientSocket.sendall(message)
 
     def receive_message(self):
