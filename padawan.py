@@ -27,7 +27,7 @@ class Client:
 
 
     def close(self):
-        self.server.close()
+        self.client.close()
         print("Anakin: Server closed!")
         self.log.close()
 
@@ -45,20 +45,19 @@ class Client:
         if not data:
             print("Anakin: no data received")
         message = json.loads(data.decode())
-        print(f"Anakin: received message from {self.host}: {message}")
         
 
         if 'step_id' not in message:
             print("Invalid message:", message)
 
         if message['step_id'] == 1:
-            print(message)
+            print(f"Anakin: received message from {self.host}: {message}")
                 
         elif message['step_id'] == 2:
-            print(message)
+            print(f"Anakin: received message from {self.host}: {message}")
 
         elif message['step_id'] == 4:
-            print(message) 
+            print(f"Anakin: received message from {self.host}: {message}")
              
 
 if __name__ == "__main__":
