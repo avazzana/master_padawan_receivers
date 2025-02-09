@@ -21,6 +21,7 @@ class Server:
         self.clientSocket = None
         self.client_id = None
         self.id = 'Obi Wan'
+        self.max = random.randint(1, 5)
         if self.save:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             self.filename = f"ServerLogs/server_{timestamp}.txt"
@@ -37,11 +38,9 @@ class Server:
         self.wait_for_client_connection_0()
 
     def wait_for_client_connection_0(self):
-        print("Waiting for client connection... Press 'x' to exit.")
         while self.clientAddress is None:
             try:
                 if keyboard.is_pressed("x"):  # Check if 'x' is pressed
-                    print("\n[X] Termination key pressed. Exiting...")
                     return
                 self.clientSocket, self.clientAddress = self.server.accept()
                 self.send_connection_confirmation_1()
@@ -61,6 +60,7 @@ class Server:
         if 'step_id' not in message:
             print("Invalid message:", message)
         elif message['step_id'] == 2:
+            self.client_id = message['sender_id']
             self.send_start_rx_command_3()
         else:
             print("wrong message id. expected 2, got ", message['step_id'])
@@ -98,8 +98,8 @@ class Server:
     
     
     def send_message(self, message_type, step_id, body):
-        print(f"Sending {message_type} message to client {self.clientAddress}")
         message = json.dumps({'type': message_type, 'sender_id' : self.id, 'step_id' : step_id, "body": body}).encode()
+        print(f"{self.id} here, sending to {self.client_id} the following message\n{message}")
         self.clientSocket.sendall(message)
 
     def receive_message(self):
@@ -117,5 +117,5 @@ class Server:
 if __name__ == "__main__":
     host = '0.0.0.0'  # Use your Wi-Fi IPv4 address
     port = 5000
-    server = Server(host, port, False)
+    server = Server(host, port, True)
     server.start_server_0()

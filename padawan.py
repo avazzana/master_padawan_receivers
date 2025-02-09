@@ -13,9 +13,8 @@ class Client:
         self.port = port
         self.save = save
         self.id = "Anakin"
-        self.client = None
+        self.server_id = None
         self.step = 0
-        self.max = random.randint(1, 5)
         if self.save:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             self.filename = f"ClientLogs/client_{timestamp}.txt"
@@ -33,6 +32,7 @@ class Client:
         if 'step_id' not in message:
             print("Invalid message:", message)
         elif message['step_id'] == 1:
+            self.server_id = message["sender_id"]
             self.sendACK_2()
         else:
             print("wrong message id. expected 1, got ", message['step_id'])
@@ -80,8 +80,8 @@ class Client:
 
 
     def send_message(self, message_type, step_id, body):
-        print(f"Anakin: Sending {message_type} message to client {self.id}")
         message = json.dumps({'type': message_type, 'sender_id' : self.id, 'step_id' : step_id, "body": body}).encode()
+        print(f"{self.id} here, sending to {self.server_id} the following message\n{message}")
         self.client.sendall(message)
     
 
@@ -99,6 +99,6 @@ if __name__ == "__main__":
     host_school = '10.69.108.4'
     host = host_home
     port = 5000
-    client = Client(host, port, False)
+    client = Client(host, port, True)
     client.connect_0()
 
