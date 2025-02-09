@@ -1,0 +1,5 @@
+Obi-Wan: Server started on 0.0.0.0:5000
+Obi Wan here, sending to None the following message:
+b'{"type": "connection_confirmation", "sender_id": "Obi Wan", "step_id": 1, "body": "Obi-Wan here. Congratulations Anakin, you are connected. But this doesn\'t mean you\'re on the jedi council"}'
+waiting for receive_message
+Obi-Wan: Timeout waiting for Padawan Client

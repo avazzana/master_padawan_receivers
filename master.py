@@ -6,6 +6,7 @@ import datetime
 from LogFile import Log
 import random
 import keyboard
+from utils import wait_until_true
 
 MAX_WAIT_TIME = 30
 MIN_RX_POWER = 40
@@ -103,12 +104,13 @@ class Server:
         self.clientSocket.sendall(message)
 
     def receive_message(self):
-        data = self.server.recv(1024)
+        data = self.server.recv(2048)
         if not data:
             print("Obi-Wan: no data received")
         message = json.loads(data.decode())
         print(f"Message from {self.clientAddress}: {message}")
         self.clientSocket.settimeout(MAX_WAIT_TIME)
+        time.sleep(1)
         return message
                 
 

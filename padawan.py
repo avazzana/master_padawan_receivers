@@ -92,6 +92,7 @@ class Client:
             print("Anakin: no data received")
         message = json.loads(data.decode())
         print(f"Anakin: received message from {self.host}: {message}")
+        time.sleep(1)
         return message
              
 
