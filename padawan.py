@@ -8,26 +8,35 @@ import random
 
 class Client:
 
-    def __init__(self, host, port):
+    def __init__(self, host, port, save):
         self.host = host
         self.port = port
+        self.save = save
         self.id = "Anakin"
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        self.filename = f"padawan_{timestamp}.txt"
-        self.log = Log(self.filename)
-        sys.stdout = self.log
         self.client = None
         self.step = 0
         self.max = random.randint(1, 5)
+        if self.save:
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            self.filename = f"padawan_{timestamp}.txt"
+            self.log = Log(self.filename)
+            sys.stdout = self.log
 
 
     def connect_0(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((self.host, self.port))
-        self.receive_message() 
+        self.wait_for_server_confirmation_1()
  
     def wait_for_server_confirmation_1(self):
-        self.receive_message()
+        message = self.receive_message()
+        if 'step_id' not in message:
+            print("Invalid message:", message)
+        elif message['step_id'] == 1:
+            self.sendACK_2()
+        else:
+            print("wrong message id. expected 1, got ", message['step_id'])
+
 
 
     def sendACK_2(self):
@@ -63,8 +72,9 @@ class Client:
    
     def close_client_connection_8(self):
         self.client.close()
-        print("Anakin: Server closed!")
-        self.log.close()
+        print("Anakin: client connection closed!")
+        if self.save:
+            self.log.close()
 
 
 
@@ -87,8 +97,8 @@ class Client:
 if __name__ == "__main__":
     host_home = '192.168.0.153'  # Use your Wi-Fi IPv4 address
     host_school = '10.69.108.4'
-    host = host_school
+    host = host_home
     port = 5000
-    client = Client(host, port)
-    client.connect_1()
+    client = Client(host, port, False)
+    client.connect_0()
 

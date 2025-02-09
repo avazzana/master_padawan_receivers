@@ -5,6 +5,7 @@ import time
 import datetime
 from LogFile import Log
 import random
+import keyboard
 
 MAX_WAIT_TIME = 1 * 60 # 5 minutes timeout
 MIN_RX_POWER = 40
@@ -12,17 +13,19 @@ MAX_RX_POWER = 50
 
 class Server:
 
-    def __init__(self, host, port):
+    def __init__(self, host, port, save):
         self.host = host
         self.port = port
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        self.filename = f"server_{timestamp}.txt"
-        self.log = Log(self.filename)
-        sys.stdout = self.log
+        self.save = save
         self.clientAddress = None
         self.clientSocket = None
         self.client_id = None
         self.id = 'Obi Wan'
+        if self.save:
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            self.filename = f"server_{timestamp}.txt"
+            self.log = Log(self.filename)
+            sys.stdout = self.log
 
     def start_server_0(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -36,6 +39,8 @@ class Server:
     def wait_for_client_connection_0(self):
         while self.clientAddress is None:
                 try:
+                    if keyboard.is_pressed('x'):
+                        return
                     self.clientSocket, self.clientAddress = self.server.accept()
                     self.send_connection_confirmation_1()
                 except socket.timeout:
@@ -55,6 +60,8 @@ class Server:
             print("Invalid message:", message)
         elif message['step_id'] == 2:
             self.send_start_rx_command_3()
+        else:
+            print("wrong message id. expected 2, got ", message['step_id'])
 
     def send_start_rx_command_3(self):
         step_id = 2
@@ -82,13 +89,14 @@ class Server:
     def close_server_connection_8(self):
         self.server.close()
         print("Obi-Wan: Server closed!")
-        self.log.close()
+        if self.save:
+            self.log.close()
 
 
     
     
     def send_message(self, message_type, step_id, body):
-        print(f"Sending {message_type} command to client {self.clientAddress}")
+        print(f"Sending {message_type} message to client {self.clientAddress}")
         message = json.dumps({'type': message_type, 'sender_id' : self.id, 'step_id' : step_id, "body": body}).encode()
         self.clientSocket.sendall(message)
 
@@ -107,5 +115,5 @@ class Server:
 if __name__ == "__main__":
     host = '0.0.0.0'  # Use your Wi-Fi IPv4 address
     port = 5000
-    server = Server(host, port)
+    server = Server(host, port, False)
     server.start_server_0()
