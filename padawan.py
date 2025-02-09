@@ -21,11 +21,13 @@ class Client:
         self.max = random.randint(1, 5)
 
 
-    def connect_1(self):
+    def connect_0(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((self.host, self.port))
         self.receive_message() 
  
+    def wait_for_server_confirmation_1(self):
+        self.receive_message()
 
 
     def sendACK_2(self):

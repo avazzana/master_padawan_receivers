@@ -24,16 +24,16 @@ class Server:
         self.client_id = None
         self.id = 'Obi Wan'
 
-    def start_server_1(self):
+    def start_server_0(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server.settimeout(MAX_WAIT_TIME)
         self.server.bind((self.host, self.port))
         self.server.listen(1)
         print(f"Obi-Wan: Server started on {self.host}:{self.port}")
-        self.wait_for_client_connection_1()
+        self.wait_for_client_connection_0()
 
-    def wait_for_client_connection_1(self):
+    def wait_for_client_connection_0(self):
         while self.clientAddress is None:
                 try:
                     self.clientSocket, self.clientAddress = self.server.accept()
@@ -108,4 +108,4 @@ if __name__ == "__main__":
     host = '0.0.0.0'  # Use your Wi-Fi IPv4 address
     port = 5000
     server = Server(host, port)
-    server.start_server_1()
+    server.start_server_0()
