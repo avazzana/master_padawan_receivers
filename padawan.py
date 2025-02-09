@@ -34,6 +34,7 @@ class Client:
             print("Invalid message:", message)
         elif message['step_id'] == 1:
             self.server_id = message["sender_id"]
+            time.sleep(5)
             self.sendACK_2()
         else:
             print("wrong message id. expected 1, got ", message['step_id'])
@@ -92,7 +93,6 @@ class Client:
             print("Anakin: no data received")
         message = json.loads(data.decode())
         print(f"Anakin: received message from {self.host}: {message}")
-        time.sleep(1)
         return message
              
 

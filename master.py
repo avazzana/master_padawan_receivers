@@ -110,7 +110,6 @@ class Server:
         message = json.loads(data.decode())
         print(f"Message from {self.clientAddress}: {message}")
         self.clientSocket.settimeout(MAX_WAIT_TIME)
-        time.sleep(1)
         return message
                 
 
