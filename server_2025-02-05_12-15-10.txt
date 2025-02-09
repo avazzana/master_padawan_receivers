@@ -1,3 +1,0 @@
-Server started on 0.0.0.0:12345
-server running
-Server closed!

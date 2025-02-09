@@ -7,7 +7,7 @@ from LogFile import Log
 import random
 import keyboard
 
-MAX_WAIT_TIME = 1 * 60 # 5 minutes timeout
+MAX_WAIT_TIME = 20
 MIN_RX_POWER = 40
 MAX_RX_POWER = 50
 
@@ -23,7 +23,7 @@ class Server:
         self.id = 'Obi Wan'
         if self.save:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            self.filename = f"server_{timestamp}.txt"
+            self.filename = f"ServerLogs/server_{timestamp}.txt"
             self.log = Log(self.filename)
             sys.stdout = self.log
 
@@ -37,15 +37,17 @@ class Server:
         self.wait_for_client_connection_0()
 
     def wait_for_client_connection_0(self):
+        print("Waiting for client connection... Press 'x' to exit.")
         while self.clientAddress is None:
-                try:
-                    if keyboard.is_pressed('x'):
-                        return
-                    self.clientSocket, self.clientAddress = self.server.accept()
-                    self.send_connection_confirmation_1()
-                except socket.timeout:
-                    print("Obi-Wan: Timeout waiting for Padawan Client")
+            try:
+                if keyboard.is_pressed("x"):  # Check if 'x' is pressed
+                    print("\n[X] Termination key pressed. Exiting...")
                     return
+                self.clientSocket, self.clientAddress = self.server.accept()
+                self.send_connection_confirmation_1()
+            except socket.timeout:
+                print("Obi-Wan: Timeout waiting for Padawan Client")
+                return
     
     def send_connection_confirmation_1(self):
         message = "Obi-Wan here. Congratulations Anakin, you are connected. But this doesn't mean you're on the jedi council"

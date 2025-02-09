@@ -1,3 +1,0 @@
-Obi-Wan: Server started on 0.0.0.0:12345
-Audrey got impatient. Run is over
-Obi-Wan: Server closed!

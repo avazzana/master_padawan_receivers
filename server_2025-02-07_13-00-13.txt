@@ -1,2 +1,0 @@
-Obi-Wan: Server started on 0.0.0.0:5000
-Obi-Wan: Timeout waiting for Padawan Client

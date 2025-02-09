@@ -1,3 +1,0 @@
-Obi-Wan: Server started on 0.0.0.0:12345
-Obi-Wan: Audrey got bored.
-Obi-Wan: Server closed!

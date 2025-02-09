@@ -18,7 +18,7 @@ class Client:
         self.max = random.randint(1, 5)
         if self.save:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            self.filename = f"padawan_{timestamp}.txt"
+            self.filename = f"ClientLogs/client_{timestamp}.txt"
             self.log = Log(self.filename)
             sys.stdout = self.log
 

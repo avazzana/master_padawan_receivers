@@ -1,3 +1,0 @@
-Obi-Wan: Server started on 0.0.0.0:5000
-Sending connection_confirmation message to client ('192.168.0.68', 47338)
-Obi-Wan: Timeout waiting for Padawan Client
