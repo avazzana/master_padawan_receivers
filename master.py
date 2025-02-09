@@ -7,7 +7,7 @@ from LogFile import Log
 import random
 import keyboard
 
-MAX_WAIT_TIME = 20
+MAX_WAIT_TIME = 30
 MIN_RX_POWER = 40
 MAX_RX_POWER = 50
 
@@ -99,7 +99,7 @@ class Server:
     
     def send_message(self, message_type, step_id, body):
         message = json.dumps({'type': message_type, 'sender_id' : self.id, 'step_id' : step_id, "body": body}).encode()
-        print(f"{self.id} here, sending to {self.client_id} the following message\n{message}")
+        print(f"{self.id} here, sending to {self.client_id} the following message:\n{message}")
         self.clientSocket.sendall(message)
 
     def receive_message(self):
@@ -108,6 +108,7 @@ class Server:
             print("Obi-Wan: no data received")
         message = json.loads(data.decode())
         print(f"Message from {self.clientAddress}: {message}")
+        self.clientSocket.settimeout(MAX_WAIT_TIME)
         return message
                 
 

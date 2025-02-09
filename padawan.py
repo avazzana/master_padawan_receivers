@@ -15,6 +15,7 @@ class Client:
         self.id = "Anakin"
         self.server_id = None
         self.step = 0
+        self.client = None
         if self.save:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             self.filename = f"ClientLogs/client_{timestamp}.txt"
@@ -81,7 +82,7 @@ class Client:
 
     def send_message(self, message_type, step_id, body):
         message = json.dumps({'type': message_type, 'sender_id' : self.id, 'step_id' : step_id, "body": body}).encode()
-        print(f"{self.id} here, sending to {self.server_id} the following message\n{message}")
+        print(f"{self.id} here, sending to {self.server_id} the following message\n:{message}")
         self.client.sendall(message)
     
 
