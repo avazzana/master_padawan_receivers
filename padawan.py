@@ -45,7 +45,9 @@ class Client:
         type = "ready_for_rx_command"
         id = 2
         body = "Hello Obi Wan! I am ready for my command!"
-        self.send_message(type, id, body)
+        for i in range(5):
+            self.send_message(type, id, body)
+            time.sleep(2)
         self.wait_for_start_rx_command_3()
     
     def wait_for_start_rx_command_3(self):
@@ -97,7 +99,7 @@ class Client:
              
 
 if __name__ == "__main__":
-    host_home = '192.168.0.153'  # Use your Wi-Fi IPv4 address
+    host_home = '192.168.0.68'  # Use your Wi-Fi IPv4 address
     host_school = '10.69.108.4'
     host = host_home
     port = 5000

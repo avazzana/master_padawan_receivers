@@ -8,7 +8,7 @@ import random
 import keyboard
 from utils import wait_until_true
 
-MAX_WAIT_TIME = 30
+MAX_WAIT_TIME = 60
 MIN_RX_POWER = 40
 MAX_RX_POWER = 50
 
@@ -32,7 +32,7 @@ class Server:
     def start_server_0(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.server.settimeout(MAX_WAIT_TIME)
+        self.server.settimeout(20)
         self.server.bind((self.host, self.port))
         self.server.listen(1)
         print(f"Obi-Wan: Server started on {self.host}:{self.port}")
@@ -57,6 +57,7 @@ class Server:
         self.wait_for_client_ack_2()
 
     def wait_for_client_ack_2(self):
+        print("waiting for client response")
         message = self.receive_message()
         if 'step_id' not in message:
             print("Invalid message:", message)
@@ -102,6 +103,7 @@ class Server:
         message = json.dumps({'type': message_type, 'sender_id' : self.id, 'step_id' : step_id, "body": body}).encode()
         print(f"{self.id} here, sending to {self.client_id} the following message:\n{message}")
         self.clientSocket.sendall(message)
+        self.clientSocket.settimeout(MAX_WAIT_TIME)
 
     def receive_message(self):
         data = self.server.recv(2048)
