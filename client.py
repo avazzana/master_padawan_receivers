@@ -1,7 +1,7 @@
 import socket
 
 class Client:
-    def __init__(self, host="192.168.0.68", port=12345):
+    def __init__(self, host="localhost192.168.0.68", port=12345):
         self.host = host
         self.port = port
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -10,7 +10,7 @@ class Client:
         self.client_socket.connect((self.host, self.port))
 
         for _ in range(10):
-            self.client_socket.sendall("hi server. It's the client here. Round " + _ + "\n".encode())
+            self.client_socket.sendall("hi server. It's the client here. Round " + str(_) + "\n".encode())
             message = self.client_socket.recv(1024).decode()
             print(f"Server says: {message}")
 

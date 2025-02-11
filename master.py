@@ -23,6 +23,8 @@ class Server:
         self.client_id = None
         self.id = 'Obi Wan'
         self.max = random.randint(1, 5)
+        self.count = 0
+        self.rx_power = 0
         if self.save:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             self.filename = f"ServerLogs/server_{timestamp}.txt"
@@ -68,21 +70,37 @@ class Server:
             print("wrong message id. expected 2, got ", message['step_id'])
 
     def send_start_rx_command_3(self):
-        step_id = 2
+        step_id = 3
         type = "start_rx_command"
         rx_power = random.randint(MIN_RX_POWER, MAX_RX_POWER)
-        body = "Obi-Wan here. Anakin, I need you to start receiving signals at " + rx_power + " dBw" 
+        body = "Obi-Wan here. Anakin, I need you to start receiving signals at " + str(rx_power) + " dBw" 
+        self.rx_power = rx_power
         print(f"Sending {type} command to client {self.clientAddress}")
         message = json.dumps({'type': type, 'sender_id' : self.id, 'step_id' : step_id, 'rx_power' : rx_power, "body": body}).encode()
         self.clientSocket.sendall(message)
-        self.close_server_connection_8()
+        self.collect_and_boss_4()
 
     def collect_and_boss_4(self):
-        print("not yet implemented")
-        self.close_server_connection_8()
+        for i in range (10):
+            print("I'm the server collecting signals at " + str(self.rx_power) + " dBw")
+            time.sleep(1)
+        self.send_stop_rx_command_5()
 
     def send_stop_rx_command_5(self):
-        print("not yet implemented")
+        self.count = self.count + 1
+        step_id = 5
+        message_type = 'stop_rx_and_repeat'
+        body = "stop rx. Ready for another receive command?"
+        next_step = 'again'
+        if self.count == self.max:
+            next_step = 'stop'
+            body = "stop rx. We're done"
+            message_type = 'stop_rx_and_close'
+        message = json.dumps({'type': message_type, 'sender_id' : self.id, 'next_step' : next_step, 'step_id' : step_id, "body": body}).encode()
+        print(f"{self.id} here, sending to {self.client_id} the following message:\n{message}")
+        self.clientSocket.sendall(message)
+        self.clientSocket.settimeout(MAX_WAIT_TIME)
+        self.close_server_connection_8()
 
     def listen_for_stop_rx_confirmation_6(self):
         self.receive_message()
@@ -106,7 +124,8 @@ class Server:
         self.clientSocket.settimeout(MAX_WAIT_TIME)
 
     def receive_message(self):
-        data = self.server.recv(2048)
+        data = self.clientSocket.recv(2048)
+        print("we have data")
         if not data:
             print("Obi-Wan: no data received")
         message = json.loads(data.decode())

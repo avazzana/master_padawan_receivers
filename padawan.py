@@ -59,11 +59,14 @@ class Client:
             self.collect_and_confirm_4(rx_power)
 
     def collect_and_confirm_4(self, rx_power):
-        print("4 not implemented yet")
-        self.close_client_connection_8()
+        for i in range (10):
+            print("I'm the client collecting signals at " + str(rx_power) + " dBw")
+            time.sleep(1)
+        self.wait_for_stop_rx_command_5()
 
     def wait_for_stop_rx_command_5(self):
         print("5 not implemented yet")
+        self.close_client_connection_8()
 
     def stop_rx_and_repeat_6a(self):
         print("6a not implemented yet")

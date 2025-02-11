@@ -16,7 +16,7 @@ class Server:
         for _ in range(10):
             message = conn.recv(1024).decode()
             print(f"Client says: {message}")
-            conn.sendall("hi client. It's your server here. Round " + _ + "\n".encode())
+            conn.sendall(("hi client. It's your server here. Round " + str(_) + "\n").encode())
 
         print("Closing connection.")
         conn.close()
